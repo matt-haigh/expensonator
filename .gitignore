@@ -1,4 +1,5 @@
-*.log
-*.pot
+# Ignore compiled python files
 *.pyc
-local_settings.py
+
+# Ignore sqlite database file
+expensonator.db
