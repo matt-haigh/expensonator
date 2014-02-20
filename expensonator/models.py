@@ -9,5 +9,5 @@ class Expense(models.Model):
 
     tags = TaggableManager()
 
-    created = models.DateTimeField(auto_now_add=False)
-    updated = models.DateTimeField(auto_now=False, auto_now_add=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
