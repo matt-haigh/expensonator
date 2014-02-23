@@ -54,7 +54,6 @@
 
         <h2>Stored Expenses</h2>
         <button ng-click="refresh()">Refresh this table</button>
-        <div>Expense sums debug: {{ expense_sums_debug | json }}</div>
         <div>
             <table>
                 <tr>
@@ -67,6 +66,7 @@
                     <th>Travel</th>
                     <th>Utilities</th>
                     <th>Total</th>
+                    <th>Number of expenses</th>
                 </tr>
                 <tr ng-repeat="expense_sum in expense_sums | orderBy:expense_sums_order_by">
                     <td>{{expense_sum.date_period}}</td>
@@ -78,6 +78,7 @@
                     <td>{{expense_sum.Travel | currency}}</td>
                     <td>{{expense_sum.Utilities | currency}}</td>
                     <td>{{expense_sum.total | currency}}</td>
+                    <td>{{expense_sum.count}}</td>
                 </tr>
             </table>
         </div>
@@ -137,25 +138,44 @@
             }
             
             $scope.compute_expense_sums = function(expenses) {
-                expense_sums = [];
-                expense_sum_total = {
-                    "date_period": "All of time",
-                    "total": 0.0};
+                // Create an object that will hold all of our sum objects
+                var expense_sums = {};
 
+                // Loop through all of the expenses
                 for (var i = 0; i < expenses.length; i++) {
+                
+                    // Get the expense amount and budget category from the expense
                     var expense_amount = parseFloat(expenses[i].amount);
                     var budget_category = expenses[i].budget_category;
                     
-                    expense_sum_total.total += expense_amount;
-                    if (budget_category in expense_sum_total) {
-                        expense_sum_total[budget_category] += expense_amount;
+                    // Get the year and year-month from the expense.  This assumes
+                    // the date is in the YYYY-MM-DD format.
+                    //var year = expenses[i].date.substring(0, 4);
+                    var year_month = expenses[i].date.substring(0, 7);
+
+                    function update_expense_sum(sum_key) {
+                        if (sum_key in expense_sums) {
+                            expense_sums[sum_key]["total"] += expense_amount;
+                            expense_sums[sum_key]["count"] += 1;
+                        }
+                        else {
+                            expense_sums[sum_key] = {
+                                "total": expense_amount,
+                                "count": 1,
+                                "date_period": sum_key};
+                        }
+                        if (budget_category in expense_sums[sum_key]) {
+                            expense_sums[sum_key][budget_category] += expense_amount;
+                        }
+                        else {
+                            expense_sums[sum_key][budget_category] = expense_amount;
+                        }
                     }
-                    else {
-                        expense_sum_total[budget_category] = expense_amount;
-                    }
+                    
+                    //update_expense_sum(year);
+                    update_expense_sum(year_month);
+                    update_expense_sum("All of time");
                 }
-                expense_sums.push(expense_sum_total);
-                $scope.expense_sums_debug = expense_sum_total;
                 return expense_sums;
             }
             
