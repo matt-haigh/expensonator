@@ -11,28 +11,27 @@
 <body>
     <div id="header">
     {% block header %}
-        <p>Header</p>
+        <h2>Expensonator!  Pwn your EXPENSES</h2>
     {% endblock %}
     </div>
     
     <div id="body">
     {% block body %}
-        <h1>Expensonator!  Pwn your EXPENSES</h1>
         {% verbatim %} 
     
     <div ng-controller="ExpenseController">
         <h3>Add an Expense:</h3>
-        <div>
-            Name: <input type="text" ng-model="new_expense.name" required />
-        </div>
-        <div>
-            Merchant: <input type="text" ng-model="new_expense.merchant" required />
-        </div>
-        <div>
-            Amount: <input type="number" ng-model="new_expense.amount" required />
-        </div>
-        <div>
-            Date: <input type="text" ng-model="new_expense.date" required />
+        <div>Name: <input type="text" ng-model="new_expense.name" required /></div>
+        <div>Merchant: <input type="text" ng-model="new_expense.merchant" required /></div>
+        <div>Amount: <input type="number" ng-model="new_expense.amount" required /></div>
+        <div>Date: <input type="text" ng-model="new_expense.date" required /></div>
+        <div>Category:
+             <input type="radio" ng-model="new_expense.budget_category" value="Entertainment">Entertainment
+             <input type="radio" ng-model="new_expense.budget_category" value="Food">Food
+             <input type="radio" ng-model="new_expense.budget_category" value="Transportation">Transportation
+             <input type="radio" ng-model="new_expense.budget_category" value="Travel">Travel
+             <input type="radio" ng-model="new_expense.budget_category" value="Housewares">Housewares
+             <input type="radio" ng-model="new_expense.budget_category" value="Utilities">Utilities
         </div>
         <div>
             <b>Form contains:</b> {{new_expense | json}}
@@ -44,12 +43,11 @@
         <div>
             Post response: {{post_response}}
         </div>
+        <div>Expenses added since last page load:</div>
+        <div ng-repeat="expense in expenses">{{expense | json }}</div>
 
         <h3>Stored Expenses</h3>
         <button ng-click="refresh()">Refresh this table</button>
-        <div ng-repeat="expense in expenses">
-            Expense added: {{expense | json }}
-        </div>
         <div>
             <table>
                 <tr>
@@ -57,12 +55,14 @@
                     <th>Merchant</th>
                     <th>Amount</th>
                     <th>Date</th>
+                    <th>Budget Category</th>
                 </tr>
                 <tr ng-repeat="expense in get_data.objects | orderBy:get_data_order_by">
                     <td>{{expense.name}}</td>
                     <td>{{expense.merchant}}</td>
-                    <td>{{expense.amount}}</td>
+                    <td>{{expense.amount | currency}}</td>
                     <td>{{expense.date}}</td>
+                    <td>{{expense.budget_category}}</td>
                 </tr>
             </table>
         </div>
