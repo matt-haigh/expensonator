@@ -26,11 +26,12 @@
         <div>Amount: <input type="number" ng-model="new_expense.amount" required /></div>
         <div>Date: <input type="text" ng-model="new_expense.date" required /></div>
         <div>Category:
+             <input type="radio" ng-model="new_expense.budget_category" value="None">None
              <input type="radio" ng-model="new_expense.budget_category" value="Entertainment">Entertainment
              <input type="radio" ng-model="new_expense.budget_category" value="Food">Food
+             <input type="radio" ng-model="new_expense.budget_category" value="Misc">Misc
              <input type="radio" ng-model="new_expense.budget_category" value="Transportation">Transportation
              <input type="radio" ng-model="new_expense.budget_category" value="Travel">Travel
-             <input type="radio" ng-model="new_expense.budget_category" value="Housewares">Housewares
              <input type="radio" ng-model="new_expense.budget_category" value="Utilities">Utilities
         </div>
         <div>Tags: <input type="text" ng-model="new_expense.tags" required /></div>
