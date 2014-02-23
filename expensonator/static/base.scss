@@ -1,0 +1,48 @@
+
+#header {
+    padding-bottom: 5px;
+    border-bottom: 1px solid;
+}
+
+#footer {
+    border-top: 1px solid;
+}
+
+#body {
+    margin-left: 30px;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 32px;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+h2 {
+    font-size: 24px;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+th, td {
+    border: 1px solid;
+    vertical-align: middle
+}
+
+table {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+
+    td, th {
+        padding: 0.3em;
+    }
+    
+    th {
+        font-weight: bold;
+    }
+    
+    td {
+        max-width: 50em;
+    }
+}

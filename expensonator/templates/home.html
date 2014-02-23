@@ -5,22 +5,26 @@
             Expensonator
         {% endblock %}
     </title>
+    <link href="/static/reset.css" type="text/css" rel="stylesheet" />
+    <link href="/static/base.css" type="text/css" rel="stylesheet" />
     <!--<script src="http://ajax.cdnjs.com/ajax/libs/jquery/1.8.2/jquery.js" type="text/javascript"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js" type="text/javascript"></script>
 </head>
 <body>
     <div id="header">
     {% block header %}
-        <h2>Expensonator!  Pwn your EXPENSES</h2>
+        <p>Header</p>
     {% endblock %}
     </div>
     
     <div id="body">
     {% block body %}
-        {% verbatim %} 
-    
+    {% verbatim %} 
+
+    <h1>Expensonator!  Pwn your EXPENSES</h1>
+
     <div ng-controller="ExpenseController">
-        <h3>Add an Expense:</h3>
+        <h2>Add an Expense:</h2>
         <div>Name: <input type="text" ng-model="new_expense.name" required /></div>
         <div>Merchant: <input type="text" ng-model="new_expense.merchant" required /></div>
         <div>Amount: <input type="number" ng-model="new_expense.amount" required /></div>
@@ -48,7 +52,7 @@
         <div>Expenses added since last page load:</div>
         <div ng-repeat="expense in expenses">{{expense | json }}</div>
 
-        <h3>Stored Expenses</h3>
+        <h2>Stored Expenses</h2>
         <button ng-click="refresh()">Refresh this table</button>
         <div>Expense sums debug: {{ expense_sums_debug | json }}</div>
         <div>
@@ -98,7 +102,7 @@
             </table>
         </div>
         
-        <h3>Raw GET data:</h3>
+        <h2>Raw GET data:</h2>
         <div>{{get_data}}</div>
     </div>
     <script>
