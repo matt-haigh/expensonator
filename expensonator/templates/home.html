@@ -21,18 +21,18 @@
         {% verbatim %} 
     
     <div ng-controller="ExpenseController">
-        <b>Add an Expense:</b>
+        <h3>Add an Expense:</h3>
         <div>
-            Name: <input type="text" ng-model="new_expense.name" required >
+            Name: <input type="text" ng-model="new_expense.name" required />
         </div>
         <div>
-            Merchant: <input type="text" ng-model="new_expense.merchant" required >
+            Merchant: <input type="text" ng-model="new_expense.merchant" required />
         </div>
         <div>
-            Amount: <input type="number" ng-model="new_expense.amount" required >
+            Amount: <input type="number" ng-model="new_expense.amount" required />
         </div>
         <div>
-            Date: <input type="text" ng-model="new_expense.date" required >
+            Date: <input type="text" ng-model="new_expense.date" required />
         </div>
         <div>
             <b>Form contains:</b> {{new_expense | json}}
@@ -41,35 +41,65 @@
         <div>
             {{post_status}}
         </div>
+        <div>
+            Post response: {{post_response}}
+        </div>
+
+        <h3>Stored Expenses</h3>
+        <button ng-click="refresh()">Refresh this table</button>
         <div ng-repeat="expense in expenses">
             Expense added: {{expense | json }}
         </div>
         <div>
-            Data from GET: {{get_data}}
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Merchant</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+                <tr ng-repeat="expense in get_data.objects | orderBy:get_data_order_by">
+                    <td>{{expense.name}}</td>
+                    <td>{{expense.merchant}}</td>
+                    <td>{{expense.amount}}</td>
+                    <td>{{expense.date}}</td>
+                </tr>
+            </table>
         </div>
+        
+        <h3>Raw GET data:</h3>
+        <div>{{get_data}}</div>
     </div>
     <script>
         function ExpenseController($scope, $http) {
             $scope.expenses = [];
+            $scope.get_data_order_by = '-date';
 
             $scope.save = function(new_expense) {
                 $http({method: 'POST', url: '/api/expense/', data: new_expense}).
                     success(function(data, status, headers, config) {
                         $scope.post_status = "Post success!";
                         $scope.expenses.push(angular.copy(new_expense));
+                        $scope.post_response = data;
                 }).
                 error(function(data, status, headers, config) {
                         $scope.post_status = "Post failed!";
+                        $scope.post_response = data;
                 });
             };
 
-            $http({method: 'GET', url: '/api/expense/?format=json'}).
-                success(function(data, status, headers, config) {
-                    $scope.get_data = data;
-            }).
-            error(function(data, status, headers, config) {
-                    $scope.get_data = "get failed";
-            });
+            $scope.refresh = function() {
+                $http({method: 'GET', url: '/api/expense/?format=json'}).
+                    success(function(data, status, headers, config) {
+                        $scope.get_data = data;
+                }).
+                error(function(data, status, headers, config) {
+                        $scope.get_data = "get failed";
+                });
+            }
+            
+            $scope.refresh();
+
         }
     </script>
     
