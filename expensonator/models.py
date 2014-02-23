@@ -32,3 +32,11 @@ class Expense(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    def tags_as_string(self):
+        return " ".join(self.tags.names())
+
+    def reset_tags_from_string(self, tags_string):
+        self.tags.clear()
+        for tag in tags_string.split(" "):
+            self.tags.add(tag)
