@@ -50,6 +50,33 @@
 
         <h3>Stored Expenses</h3>
         <button ng-click="refresh()">Refresh this table</button>
+        <div>Expense sums debug: {{ expense_sums_debug | json }}</div>
+        <div>
+            <table>
+                <tr>
+                    <th>Date Period</th>
+                    <th>None</th>
+                    <th>Entertainment</th>
+                    <th>Food</th>
+                    <th>Misc</th>
+                    <th>Transportation</th>
+                    <th>Travel</th>
+                    <th>Utilities</th>
+                    <th>Total</th>
+                </tr>
+                <tr ng-repeat="expense_sum in expense_sums | orderBy:expense_sums_order_by">
+                    <td>{{expense_sum.date_period}}</td>
+                    <td>{{expense_sum.None | currency}}</td>
+                    <td>{{expense_sum.Entertainment | currency}}</td>
+                    <td>{{expense_sum.Food | currency}}</td>
+                    <td>{{expense_sum.Misc | currency}}</td>
+                    <td>{{expense_sum.Transportation | currency}}</td>
+                    <td>{{expense_sum.Travel | currency}}</td>
+                    <td>{{expense_sum.Utilities | currency}}</td>
+                    <td>{{expense_sum.total | currency}}</td>
+                </tr>
+            </table>
+        </div>
         <div>
             <table>
                 <tr>
@@ -78,6 +105,8 @@
         function ExpenseController($scope, $http) {
             $scope.expenses = [];
             $scope.get_data_order_by = '-date';
+            $scope.expense_sums = [];
+            $scope.expense_sums_order_by = '-date_period'
 
             $scope.save = function(new_expense) {
                 $http({method: 'POST', url: '/api/expense/', data: new_expense}).
@@ -96,10 +125,34 @@
                 $http({method: 'GET', url: '/api/expense/?format=json'}).
                     success(function(data, status, headers, config) {
                         $scope.get_data = data;
+                        $scope.expense_sums = $scope.compute_expense_sums(data.objects);
                 }).
                 error(function(data, status, headers, config) {
                         $scope.get_data = "get failed";
                 });
+            }
+            
+            $scope.compute_expense_sums = function(expenses) {
+                expense_sums = [];
+                expense_sum_total = {
+                    "date_period": "All of time",
+                    "total": 0.0};
+
+                for (var i = 0; i < expenses.length; i++) {
+                    var expense_amount = parseFloat(expenses[i].amount);
+                    var budget_category = expenses[i].budget_category;
+                    
+                    expense_sum_total.total += expense_amount;
+                    if (budget_category in expense_sum_total) {
+                        expense_sum_total[budget_category] += expense_amount;
+                    }
+                    else {
+                        expense_sum_total[budget_category] = expense_amount;
+                    }
+                }
+                expense_sums.push(expense_sum_total);
+                $scope.expense_sums_debug = expense_sum_total;
+                return expense_sums;
             }
             
             $scope.refresh();
