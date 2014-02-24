@@ -13,7 +13,8 @@ class ExpenseResource(ModelResource):
 
     def save(self, bundle, skip_errors=False):
         bundle = super(ExpenseResource, self).save(bundle, skip_errors)
-        bundle.obj.reset_tags_from_string(bundle.data["tags"])
+        if "tags" in bundle.data:
+            bundle.obj.reset_tags_from_string(bundle.data["tags"])
         return bundle
 
     class Meta:
