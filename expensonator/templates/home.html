@@ -39,18 +39,12 @@
              <input type="radio" ng-model="new_expense.budget_category" value="Utilities">Utilities
         </div>
         <div>Tags: <input type="text" ng-model="new_expense.tags" required /></div>
-        <div>
-            <b>Form contains:</b> {{new_expense | json}}
-        </div>
+        <!--<div><b>Form contains:</b> {{new_expense | json}}</div>-->
         <button ng-click="save(new_expense)">SAVE</button>
-        <div>
-            {{post_status}}
-        </div>
-        <div>
-            Post response: {{post_response}}
-        </div>
         <div>Expenses added since last page load:</div>
         <div ng-repeat="expense in expenses">{{expense | json }}</div>
+        <div>{{post_status}}</div>
+        <div>Post response: {{post_response}}</div>
 
         <h2>Stored Expenses</h2>
         <button ng-click="refresh()">Refresh this table</button>

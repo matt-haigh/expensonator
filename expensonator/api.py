@@ -19,6 +19,7 @@ class ExpenseResource(ModelResource):
 
     class Meta:
         queryset = Expense.objects.all()
+        always_return_data = True
         excludes = ["created", "updated"]
         # WARNING: Tastypie docs say that this is VERY INSECURE!
         # For development only!
