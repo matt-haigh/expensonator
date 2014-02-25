@@ -121,7 +121,7 @@
             };
 
             $scope.refresh = function() {
-                $http({method: 'GET', url: '/api/expense/?format=json'}).
+                $http({method: 'GET', url: '/api/expense/?format=json&limit=1000'}).
                     success(function(data, status, headers, config) {
                         $scope.get_data = data;
                         $scope.expense_sums = $scope.compute_expense_sums(data.objects);
