@@ -41,8 +41,6 @@
         <div>Tags: <input type="text" ng-model="new_expense.tags" required /></div>
         <!--<div><b>Form contains:</b> {{new_expense | json}}</div>-->
         <button ng-click="save(new_expense)">SAVE</button>
-        <div>Expenses added since last page load:</div>
-        <div ng-repeat="expense in expenses">{{expense | json }}</div>
         <div>{{post_status}}</div>
         <div>Post response: {{post_response}}</div>
 
@@ -97,6 +95,8 @@
             </table>
         </div>
         
+        <h2>Expenses added since last page load:</h2>
+        <div ng-repeat="expense in expenses">{{expense | json }}</div>
         <h2>Raw GET data:</h2>
         <div>{{get_data}}</div>
     </div>
