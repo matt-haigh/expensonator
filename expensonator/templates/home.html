@@ -52,7 +52,6 @@
             <table>
                 <tr>
                     <th>Date Period</th>
-                    <th>None</th>
                     <th>Entertainment</th>
                     <th>Food</th>
                     <th>Gifts</th>
@@ -66,7 +65,6 @@
                 </tr>
                 <tr ng-repeat="expense_sum in expense_sums | orderBy:expense_sums_order_by">
                     <td>{{expense_sum.date_period}}</td>
-                    <td>{{expense_sum.None | currency}}</td>
                     <td>{{expense_sum.Entertainment | currency}}</td>
                     <td>{{expense_sum.Food | currency}}</td>
                     <td>{{expense_sum.Gifts | currency}}</td>
@@ -77,6 +75,20 @@
                     <td>{{expense_sum.Utilities | currency}}</td>
                     <td>{{expense_sum.total | currency}}</td>
                     <td>{{expense_sum.count}}</td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th>Date Period</th>
+                    <th>None</th>
+                    <th>Number of expenses</th>
+                </tr>
+                <tr ng-repeat="none_expense_sum in none_expense_sums | orderBy:expense_sums_order_by">
+                    <td>{{none_expense_sum.date_period}}</td>
+                    <td>{{none_expense_sum.None | currency}}</td>
+                    <td>{{none_expense_sum.count}}</td>
                 </tr>
             </table>
         </div>
@@ -130,7 +142,7 @@
                 $http({method: 'GET', url: '/api/expense/?format=json&limit=1000'}).
                     success(function(data, status, headers, config) {
                         $scope.get_data = data;
-                        $scope.expense_sums = $scope.compute_expense_sums(data.objects);
+                        $scope.compute_expense_sums(data.objects);
                 }).
                 error(function(data, status, headers, config) {
                         $scope.get_data = "get failed";
@@ -138,8 +150,9 @@
             }
             
             $scope.compute_expense_sums = function(expenses) {
-                // Create an object that will hold all of our sum objects
+                // Create objects that will hold all of our sum objects
                 var expense_sums = {};
+                var none_expense_sums = {};
 
                 // Loop through all of the expenses
                 for (var i = 0; i < expenses.length; i++) {
@@ -153,30 +166,38 @@
                     //var year = expenses[i].date.substring(0, 4);
                     var year_month = expenses[i].date.substring(0, 7);
 
-                    function update_expense_sum(sum_key) {
-                        if (sum_key in expense_sums) {
-                            expense_sums[sum_key]["total"] += expense_amount;
-                            expense_sums[sum_key]["count"] += 1;
+                    function update_expense_sum(sums, sum_key) {
+                        if (sum_key in sums) {
+                            sums[sum_key]["total"] += expense_amount;
+                            sums[sum_key]["count"] += 1;
                         }
                         else {
-                            expense_sums[sum_key] = {
+                            sums[sum_key] = {
                                 "total": expense_amount,
                                 "count": 1,
                                 "date_period": sum_key};
                         }
-                        if (budget_category in expense_sums[sum_key]) {
-                            expense_sums[sum_key][budget_category] += expense_amount;
+                        if (budget_category in sums[sum_key]) {
+                            sums[sum_key][budget_category] += expense_amount;
                         }
                         else {
-                            expense_sums[sum_key][budget_category] = expense_amount;
+                            sums[sum_key][budget_category] = expense_amount;
                         }
                     }
                     
-                    //update_expense_sum(year);
-                    update_expense_sum(year_month);
-                    update_expense_sum("All of time");
+                    // Separate 'None' expenses into their own sums object so that
+                    // we can easily display them in a separate table.
+                    if (budget_category == "None") {
+                        update_expense_sum(none_expense_sums, year_month);
+                        update_expense_sum(none_expense_sums, "All of time");
+                    }
+                    else {
+                        update_expense_sum(expense_sums, year_month);
+                        update_expense_sum(expense_sums, "All of time");
+                    }
                 }
-                return expense_sums;
+                $scope.expense_sums = expense_sums;
+                $scope.none_expense_sums = none_expense_sums;
             }
             
             $scope.refresh();
