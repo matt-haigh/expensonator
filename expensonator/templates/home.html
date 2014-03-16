@@ -33,7 +33,9 @@
              <input type="radio" ng-model="new_expense.budget_category" value="None">None
              <input type="radio" ng-model="new_expense.budget_category" value="Entertainment">Entertainment
              <input type="radio" ng-model="new_expense.budget_category" value="Food">Food
+             <input type="radio" ng-model="new_expense.budget_category" value="Gifts">Gifts
              <input type="radio" ng-model="new_expense.budget_category" value="Misc">Misc
+             <input type="radio" ng-model="new_expense.budget_category" value="Rent">Rent
              <input type="radio" ng-model="new_expense.budget_category" value="Transportation">Transportation
              <input type="radio" ng-model="new_expense.budget_category" value="Travel">Travel
              <input type="radio" ng-model="new_expense.budget_category" value="Utilities">Utilities
@@ -53,7 +55,9 @@
                     <th>None</th>
                     <th>Entertainment</th>
                     <th>Food</th>
+                    <th>Gifts</th>
                     <th>Misc</th>
+                    <th>Rent</th>
                     <th>Transportation</th>
                     <th>Travel</th>
                     <th>Utilities</th>
@@ -65,7 +69,9 @@
                     <td>{{expense_sum.None | currency}}</td>
                     <td>{{expense_sum.Entertainment | currency}}</td>
                     <td>{{expense_sum.Food | currency}}</td>
+                    <td>{{expense_sum.Gifts | currency}}</td>
                     <td>{{expense_sum.Misc | currency}}</td>
+                    <td>{{expense_sum.Rent | currency}}</td>
                     <td>{{expense_sum.Transportation | currency}}</td>
                     <td>{{expense_sum.Travel | currency}}</td>
                     <td>{{expense_sum.Utilities | currency}}</td>
