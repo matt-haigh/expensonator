@@ -25,19 +25,16 @@ h2 {
     margin-bottom: 0.5em;
 }
 
-th, td {
-    border: 1px solid;
-    vertical-align: middle
-}
-
-table {
+table.expense {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
-
+    
     td, th {
+        border: 1px solid;
+        vertical-align: middle;
         padding: 0.3em;
     }
-    
+
     th {
         font-weight: bold;
     }
@@ -45,5 +42,13 @@ table {
     td {
         max-width: 50em;
         min-width: 5.5em;
+    }
+}
+
+.datepicker {
+    td, th {
+        border: 1px solid;
+        vertical-align: middle;
+        padding: 0.1em;
     }
 }
